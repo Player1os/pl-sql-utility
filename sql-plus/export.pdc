@@ -1,6 +1,6 @@
 ﻿-- SQL*PLUS
 
--- The first line of this file is required due to SQLPLUS not supporting UTF8 with BOM and the PLSQL Developer requiring UTF8 with BOM to allow for external editing without corrupting Unicode characters.
+-- The first line of this file is required due to SQL*PLUS not supporting UTF8 with BOM and the PL/SQL Developer requiring UTF8 with BOM to allow for external editing without corrupting Unicode characters.
 
 -- Store the result of the query into a newly created temporary table.
 CREATE TABLE temp AS
@@ -20,7 +20,7 @@ COL output FORMAT A32000
 -- 2. The max width for the outputted column is 32000 characters by default.
 
 -- Export each column separately to ensure correct formatting, set the column's alias to 'output'.
-SPOOL filepath_col_n.txt
+SPOOL file_path_col_n.txt
 SELECT col_n AS output FROM	temp;
 SPOOL OFF
 
