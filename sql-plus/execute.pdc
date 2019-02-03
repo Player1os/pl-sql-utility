@@ -1,5 +1,9 @@
 ﻿-- SQL*PLUS
 
+-- Print timing information and executed statements.
+SET TIMING ON;
+SET ECHO ON;
+
 -- The first line of this file is required due to SQL*PLUS not supporting UTF8 with BOM and the PL/SQL Developer requiring UTF8 with BOM to allow for external editing without corrupting Unicode characters.
 
 -- Choose one of the following:
