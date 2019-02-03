@@ -7,7 +7,7 @@ SET ECHO ON;
 -- The first line of this file is required due to SQL*PLUS not supporting UTF8 with BOM and the PL/SQL Developer requiring UTF8 with BOM to allow for external editing without corrupting Unicode characters.
 
 -- Choose one of the following:
--- 1. Write the content of the script to be executed followed by a 'COMMIT;' statement if required.
--- 2. Import scripts using the '@relative_file_path.sql' statement.
+-- 1. Write the content of the script to be executed followed by a "COMMIT;" statement if required.
+-- 2. Import scripts using the "@'relative_file_path.sql';" statement.
 
 -- Due to the 'AMERICAN_AMERICA.AL32UTF8' value of the NLS_LANG environment variable, it is possible to freely use any Unicode characters in this script as well as any imported script.

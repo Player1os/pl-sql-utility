@@ -4,25 +4,36 @@
 
 -- Store the result of the query into a newly created temporary table.
 CREATE TABLE temp AS
-SELECT * FROM pl_test;
+SELECT
+	*
+FROM
+	pl_test
+;
 
 -- Configure the environment.
-SET FEEDBACK OFF
-SET HEADING OFF
-SET TERMOUT OFF
-SET PAGESIZE 0
-SET TRIMSPOOL ON
-SET LINESIZE 32000
-COL output FORMAT A32000
+SET FEEDBACK OFF;
+SET HEADING OFF;
+SET TERMOUT OFF;
+SET PAGESIZE 0;
+SET TRIMSPOOL ON;
+SET LINESIZE 32000;
+COL output FORMAT A32000;
 
 -- Beware of the following restrictions when writing the following SELECT queries:
 -- 1. It is recommended to convert any numeric values to strings beforehand, due to the effects of the NUMWIDTH parameter.
 -- 2. The max width for the outputted column is 32000 characters by default.
 
 -- Export each column separately to ensure correct formatting, set the column's alias to 'output'.
-SPOOL file_path_col_n.txt
-SELECT col_n AS output FROM	temp;
-SPOOL OFF
+SPOOL 'file_path_col_n.txt';
+
+SELECT
+	col_n
+		AS output
+FROM
+	temp
+;
+
+SPOOL OFF;
 
 -- When done, drop the temporary table created above.
 DROP TABLE temp PURGE;
