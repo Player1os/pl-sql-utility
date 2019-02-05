@@ -6,7 +6,6 @@ CREATE TABLE "table" (
 	"key_2" NUMBER(38),
 	-- ...
 	"key_n" NUMBER(38),
-
 	"x_1" VARCHAR(256),
 	"x_2" VARCHAR(256),
 	-- ...
@@ -35,14 +34,12 @@ CREATE TABLE "table_history" (
 	"key_2" NUMBER(38),
 	-- ...
 	"key_n" NUMBER(38),
-
 	"x_1" VARCHAR(256),
 	"x_2" VARCHAR(256),
 	-- ...
 	"x_m" VARCHAR(256),
-
 	"start_datestamp" NUMBER(8) NOT NULL,
-	"end_datestamp" NUMBER(8)
+	"end_datestamp" NUMBER(8) DEFAULT 99991231
 );
 
 -- With the following indexes:
