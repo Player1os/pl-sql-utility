@@ -39,7 +39,7 @@ CREATE TABLE "table_history" (
 	-- ...
 	"x_m" VARCHAR(256),
 	"start_datestamp" NUMBER(8) NOT NULL,
-	"end_datestamp" NUMBER(8) DEFAULT 99991231
+	"end_datestamp" NUMBER(8) NOT NULL
 );
 
 -- With the following indexes:
