@@ -1,13 +1,10 @@
-﻿-- Assuming we have a generic table and have already created a historified table for it as described in the 'definition.sql' script.
+-- Assuming we have a generic table and have already created a historified table for it as described in the 'definition.sql' script.
 
 -- Set the previous day's datestamp as the end_datestamp of every historified table record where:
 -- - No record with matching key values is found in the generic table.
 -- - A record with matching key values is found in the generic table with at least one mismatch in the rest of its values.
 
 UPDATE
-	/*+
-		PARALLEL
-	*/
 	"table_history" h
 SET
 	h."end_datestamp" = TO_CHAR(SYSDATE - 1, 'YYYYMMDD')
@@ -15,7 +12,7 @@ WHERE
 	h."end_datestamp" = 99991231
 	AND (
 		NOT EXISTS (
-			SELECT
+			SELECT /*+ PARALLEL USE_HASH */
 				t.*
 			FROM
 				"table" t
@@ -44,7 +41,7 @@ WHERE
 				)
 		)
 		OR EXISTS (
-			SELECT
+			SELECT /*+ PARALLEL USE_HASH */
 				t.*
 			FROM
 				"table" t
@@ -103,12 +100,8 @@ WHERE
 -- - No current (i.e. with a default max value as the end_datestamp) record with matching key values is found in the historified table.
 -- - A current (i.e. with a default max value as the end_datestamp) record with matching key values is found in the historified table with at least one mismatch in the rest of its values.
 
-INSERT
-	/*+
-		PARALLEL
-	*/
-INTO "table_history"
-SELECT
+INSERT /*+ APPEND */ INTO "table_history"
+SELECT /*+ PARALLEL USE_HASH */
 	t.*,
 	TO_CHAR(SYSDATE, 'YYYYMMDD'),
 	99991231

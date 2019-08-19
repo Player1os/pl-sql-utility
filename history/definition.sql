@@ -1,7 +1,10 @@
-﻿-- Assuming we have a generic table, similar to this one:
+-- Assuming we have a generic table, similar to this one:
 /*
 
-CREATE TABLE "table" (
+CREATE TABLE "table"
+	NOLOGGING
+	COMPRESS
+(
 	"key_1" NUMBER(38),
 	"key_2" NUMBER(38),
 	-- ...
@@ -29,7 +32,10 @@ ALTER TABLE "table"
 */
 -- The historified table will have the following definition:
 
-CREATE TABLE "table_history" (
+CREATE TABLE "table_history"
+	NOLOGGING
+	COMPRESS
+(
 	"key_1" NUMBER(38),
 	"key_2" NUMBER(38),
 	-- ...
