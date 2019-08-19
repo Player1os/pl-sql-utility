@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Simple PL/SQL Formatter</title>
+		<base href="/" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="shortcut icon" type="image/x-icon" href="data:image/x-icon;," />
+		<style>
+			h1 {
+				text-align: center;
+			}
+
+			div {
+				width: 1000px;
+				margin: 0 auto;
+			}
+
+			textarea {
+				display: block;
+				float: left;
+				margin: 5px;
+				width: 480px;
+				height: 400px;
+				resize: none;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Simple PL/SQL Formatter</h1>
+		<div>
+			<textarea id="input-text" oninput="format(this.value)"></textarea>
+			<textarea id="output-text" readonly></textarea>
+		</div>
+		<script type="text/javascript">
+			var faviconLink = document.createElement('link')
+			faviconLink.rel = 'shortcut icon'
+			faviconLink.type = 'image/x-icon'
+			faviconLink.href = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAZdEVYdFNvZnR3YXJlAHBhaW50Lm5ldCA0LjAuMTZEaa/1AAAE30lEQVRYR72Xa2hcVRDHr4/6QIRqa2tBKCiCVpHsJtm8k91kN6Z5uiFrNtnmoch+ECtYwfqgLiIt/VCl+RiIpSo0GNESClVSC/WJRHzb4pdSv2jVqrViU7u2XX//m3PD3e69ydoYB4YzZ2bOzJyZueeeY/lBX1/fytra2pbKysonwF3l5eUHwCNlZWU/gqfBXCAQsFE0+Cfyn0Kh0DeMU1VVVWMVFRWb6uvrY11dXcuN2fmhpaXlFhZtwdjnwWDwguNgsYit8wQ1je3NHR0dq427fCDyp0tLS8+6F7Lod4I5jOx96Enol6urq19CthPeTjJko2jxkO3CxivSxdmH6Ctjf7htIp9BvtG4nQXS1egosHA3aavr7++/wYgXDQMDAyuwGcH2644ffAaM2LJIUdwREPGv7Og1FLZQ+/6mpqZoQ0PD3d3d3WuHhoaWT0xMXGGWFUAmk7lSgbe2tq5tbGy8R/XHRgp8FudvsvtTjh98Rswyy8JJryMoBklhDqMKVs142tCeun54L2DcW1ZPT8+1GD3opbgUSIYn0+n0MuN+Fkjf5TRRL4G8p671WrgYxOY5HB+gtPflcrnLjNtZGBwcDCUSiavMVJ/jTXR3gtTuILVvg8cwkPUy7IX6mtjIUXA/TrfX1NTEyfKNxrwVi8WuGx4eDprpbBOy6F0EJYZVAGq+VCq1huZah14N+uFoNNoKvV60eMzvTCaTq+dr1HA4XIH+dF4TNjc3P6DIYarBPqBjNykYdbVRuWRQrQmsDJubsS3HdpY6OzvjRsU+hHrcKXSQSGeQTbPwVWq3jVI8rD5hF22kNdzW1hammcMYD5OZDnSSlG0juJ01e8BPsfGXl210osa9ZVHvPi+lpUQCXm/cWxYHzQYvpaVEyt5u3OefhP8XejahG6n399TvLcYpxi9ZkHc2MM+qP6jlO9T6K+Z5f094J5EdYzzh5jvo24QYmqHB7oedd1ioqRwd6HHO+5uNyAY2cQf8j106z4kP7Vle3yZk4Vbx6OhV0GPs/g0CfIpO32fkexHbwbGuCUOP6GelObu6Hv1vjd68Afg2IbsfFI+x271AqDTz6d0qOQE+6uJnCSQkPp9pSryFAvBtQha+aNjaYYIe+MKRQR8xIks94vCFZGi3+PF4fA32FgwAHe8mRHCOXTwE206zfhzMN8A/Q3oPijcyMnI19MVG90s2Ojq6DN0LCwWw4EmIg6/lGLEdCPQz6H0mWkAGfnbr43Bc/GIz4NuELM773Kh1Wjo0TYx5tr29faXmGMi49M5jwzZYbA/4NmEkEnmMem5VujEyieF10lEgkuN4RHPdH+rq6nrJRIaxXjxdbMhS3leALCh7rN8G/QKy3yT3bUKuZw8a9hxwtwsQ0HHJlV6CeJ774TVGbAOB34bTQ44dJ4CLAdlRY8f3JMzi7CN2todxnPETeAU3JBycQLaXDJXKBrt70l0+6O8YFVAelpSUnGEs7ndcDBLkL5wZd8kOZ8TtBJSkpDu8dN3o24SXguz2JGVKO2WhwYa99NyY14Smwz0V/w0SyN9k5BSjp9yNlN0+OeeAMhQ8zZYC8VH4NHPA/ThF+T+7mqs5cWo/TrlrrjLu5gfnec73q8vkGGg/z9nBcbJ1liDnHIhGplfSDzg5DD2Fzij043qe+b8zLesfNziCYrKSg8gAAAAASUVORK5CYII='
+			document.getElementsByTagName('head')[0].appendChild(faviconLink)
+
+			function processTextItems(parsedItems, extractor) {
+				// Initialize the result.
+				var result = []
+
+				// Process each text item.
+				parsedItems.forEach(function (parsedItem) {
+					// Check whether the current item is of text type.
+					if (parsedItem.type !== 'text') {
+						result.push(parsedItem)
+						return
+					}
+
+					// Execute the extractor upon the text item's value and add its results to the overall result.
+					extractor(parsedItem.value).forEach(function (resultItem) {
+						result.push(resultItem)
+					})
+				})
+
+				// Return the result.
+				return result
+			}
+
+			// Define constant variables.
+			var immutableTokenTypes = [{
+				name: 'multiline_comment',
+				startSequence: '/*',
+				endSequence: '*/',
+				isEndSequenceSelfEscaped: false,
+			}, {
+				name: 'single_line_comment',
+				startSequence: '--',
+				endSequence: '\n',
+				isEndSequenceSelfEscaped: false,
+			}, {
+				name: 'quoted_identifier',
+				startSequence: '"',
+				endSequence: '"',
+				isEndSequenceSelfEscaped: false,
+			}, {
+				name: 'quoted_literal',
+				startSequence: "'",
+				endSequence: "'",
+				isEndSequenceSelfEscaped: true,
+			}]
+			var whitespaceCharacters = [
+				'\r',
+				'\t',
+				'\n',
+			]
+			var keywords = [
+				'and',
+				'all',
+				'append',
+				'as',
+				'before',
+				'between',
+				'by',
+				'case',
+				'compress',
+				'count',
+				'create',
+				'date',
+				'decode',
+				'delete',
+				'distinct',
+				'drop',
+				'end',
+				'flashback',
+				'from',
+				'full',
+				'grant',
+				'group',
+				'having',
+				'in',
+				'inner',
+				'insert',
+				'integer',
+				'into',
+				'join',
+				'left',
+				'nologging',
+				'not',
+				'null',
+				'number',
+				'of',
+				'on',
+				'or',
+				'order',
+				'outer',
+				'over',
+				'parallel',
+				'partition',
+				'pctfree',
+				'purge',
+				'recyclebin',
+				'right',
+				'select',
+				'set',
+				'table',
+				'tablespace',
+				'truncate',
+				'then',
+				'to',
+				'union',
+				'update',
+				'values',
+				'varchar',
+				'varchar2',
+				'when',
+				'where',
+			]
+			var operators = [
+				'(+)',
+				'(*)',
+				'>=',
+				'<=',
+				'<>',
+				'||',
+				'+',
+				'-',
+				'*',
+				'/',
+				'=',
+				'>',
+				'<',
+				'(',
+				')',
+				';',
+			]
+
+			function immutableTokensExtractor(value) {
+				// Initialize the result.
+				var result = []
+
+				// Declare a storage for the current immutable token type.
+				var immutableTokenType
+
+				// Initialize the string indices.
+				var index = 0
+				var borderIndex = -1
+				var internalIndex = -1
+
+				for (;;) {
+					// Find the closest start sequence across all immutable token types.
+					borderIndex = value.length
+					immutableTokenTypes.forEach(function (currentImmutableTokenType) {
+						var currentBorderIndex = value.indexOf(currentImmutableTokenType.startSequence, index)
+						if ((currentBorderIndex !== -1) && (currentBorderIndex < borderIndex)) {
+							borderIndex = currentBorderIndex
+							immutableTokenType = currentImmutableTokenType
+						}
+					})
+
+					// If no start sequence has not been found, the rest of the string becomes a new text item.
+					if (borderIndex === value.length) {
+						result.push({
+							type: 'text',
+							value: value.substring(index)
+						})
+
+						// The current text item has been fully processed.
+						return result
+					}
+
+					// If the start sequence has been found, the part of the string up to it becomes a new text item.
+					result.push({
+						type: 'text',
+						value: value.substring(index, borderIndex)
+					})
+
+					// Set the index to one character after the found start sequence.
+					index = borderIndex + immutableTokenType.startSequence.length
+
+					// Set the internal index to the first unchecked point.
+					internalIndex = index
+
+					for (;;) {
+						// Find the closest end sequence.
+						borderIndex = value.indexOf(immutableTokenType.endSequence, internalIndex)
+
+						// If the end sequence has not been found, the rest of the string becomes a new token item.
+						if (borderIndex === -1) {
+							result.push({
+								type: immutableTokenType.name,
+								value: value.substring(index)
+							})
+
+							// The current text item has been fully processed.
+							return result
+						}
+
+						// Set the internal index to the first unchecked point.
+						internalIndex = borderIndex + immutableTokenType.endSequence.length
+
+						// Verify that the found end sequence is not part of an escape sequence.
+						if (!immutableTokenType.isEndSequenceSelfEscaped || (value[internalIndex] !== immutableTokenType.endSequence)) {
+							break
+						}
+					}
+
+					// If the end sequence has been found, the part of the string up to it becomes a new token item.
+					result.push({
+						type: immutableTokenType.name,
+						value: value.substring(index, borderIndex)
+					})
+
+					// Set the index to one character after the found end sequence.
+					index = borderIndex + immutableTokenType.endSequence.length
+				}
+
+				// Return the result.
+				return result
+			}
+
+			function wordsExtractor(value) {
+				// Replace all whitespace characters with a space.
+				whitespaceCharacters.forEach(function (whitespaceCharacter) {
+					value = value.replace(new RegExp(whitespaceCharacter, 'g'), ' ')
+				})
+
+				// Add whitespace after commas.
+				value = value.replace(/,/g, ', ')
+
+				// Add whitespace around operators.
+				operators.forEach(function (operator) {
+					var rexExpString = operator.replace(new RegExp('', 'g'), '\\')
+					rexExpString = rexExpString.substr(0, rexExpString.length - 1)
+
+					value = value.replace(new RegExp(rexExpString, 'g'), ' ' + operator + ' ')
+				})
+
+				// Remove all repeated space sequences.
+				while (value.indexOf('  ') !== -1) {
+					value = value.replace(/  /g, ' ')
+				}
+
+				// Remove whitespace before commas.
+				value = value.replace(/ ,/g, ',')
+
+				// Recombine operator sequences.
+				operators.forEach(function (operator) {
+					if (operator.length === 1) {
+						return
+					}
+
+					var rexExpString = operator.replace(new RegExp('', 'g'), ' \\')
+					rexExpString = rexExpString.substr(1, rexExpString.length - 3)
+
+					value = value.replace(new RegExp(rexExpString, 'g'), operator)
+				})
+
+				// Split the value by spaces and convert each word into a new keyword or text item.
+				return value.split(' ').map(function (word) {
+					return {
+						type: (keywords.indexOf(word.toLowerCase()) === -1)
+							? 'text'
+							: 'keyword',
+						value: word.trim(),
+					}
+				})
+			}
+
+			function format(value) {
+				// Convert the value into the parsed items format.
+				var parsedItems = [{
+					type: 'text',
+					value: value,
+				}]
+
+				// Parse immutable tokens.
+				parsedItems = processTextItems(parsedItems, immutableTokensExtractor)
+
+				// Parse words.
+				parsedItems = processTextItems(parsedItems, wordsExtractor)
+
+				// Output the result into the output text area element.
+				document.getElementById('output-text').innerHTML = parsedItems
+					.filter(function (parsedItem) {
+						return parsedItem.type !== 'text' || parsedItem.value !== ''
+					})
+					.map(function (parsedItem) {
+						switch (parsedItem.type) {
+							case 'multiline_comment':
+								return '/*' + parsedItem.value + '*/'
+							case 'single_line_comment':
+								return '--' + parsedItem.value + '\n'
+							case 'quoted_identifier':
+								return '"' + parsedItem.value + '"'
+							case 'quoted_literal':
+								return "'" + parsedItem.value + "'"
+							case 'keyword':
+								return parsedItem.value.toUpperCase()
+							default:
+								return parsedItem.value.toLowerCase()
+						}
+					}).join(' ')
+			}
+		</script>
+	</body>
+</html>
