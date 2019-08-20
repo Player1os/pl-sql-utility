@@ -46,7 +46,8 @@ CREATE TABLE "table_history"
 	"x_m" VARCHAR(256),
 	"start_datestamp" NUMBER(8) NOT NULL,
 	"end_datestamp" NUMBER(8) NOT NULL
-);
+)
+;
 
 -- With the following indexes:
 
@@ -65,4 +66,3 @@ CREATE INDEX "table_history_idx2"
 
 CREATE INDEX "table_history_idx3"
 	ON "table_history" ("end_datestamp")
-;

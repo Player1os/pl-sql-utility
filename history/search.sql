@@ -2,12 +2,11 @@
 -- and that the &datestamp parameter contains the datestamp we wish to view:
 
 SELECT /*+ PARALLEL USE_HASH */
-	h.*,
-	h.rowid
+	"h".*,
+	"h".rowid
 FROM
-	"table_history" h
+	"table_history" "h"
 WHERE
 	&datestamp
-		BETWEEN h."start_datestamp"
-		AND h."end_datestamp"
-;
+		BETWEEN "h"."start_datestamp"
+		AND "h"."end_datestamp"

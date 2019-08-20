@@ -159,6 +159,5 @@ WHERE
 			)
 		)
 	)
-;
 
 -- The case when a full match between all values (key and otherwise) is found in the generic table and the historified table requires no action.

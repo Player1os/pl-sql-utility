@@ -38,4 +38,3 @@ SELECT /*+ PARALLEL USE_HASH */
 	table_name
 FROM
 	all_tables
-;
