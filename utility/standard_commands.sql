@@ -19,9 +19,8 @@ CREATE TABLE "&table_name"
 	PCTFREE 0 -- Use only if the table in question will be read-only and will not be updated with new values.
 	COMPRESS -- May be contraproductive if the data size cannot be significantly reduced.
 	PARALLEL
-AS (
+AS
 	SELECT -- ...
-)
 ;
 
 -- Create a primary key constraint.
@@ -78,6 +77,18 @@ SELECT /*+ PARALLEL USE_HASH */ DISTINCT -- The Distinct clasue is, of course, o
 	*
 FROM
 	"&table_name"
+;
+
+-- Load data from a table with subqueries.
+WITH
+	".&subquery_name_1" AS (
+		SELECT -- ...
+	),
+	-- ...
+	".&subquery_name_N" AS (
+		SELECT -- ...
+	)
+SELECT -- ...
 ;
 
 -- Insert data into a table from select.
