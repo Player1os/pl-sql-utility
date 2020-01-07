@@ -26,15 +26,81 @@ WHERE
 	object_type = 'TABLE'
 ;
 
--- List all columns visible to the current user.
+-- List all columns of a given table visible to the current user.
 SELECT /*+ PARALLEL USE_HASH */
-	*
+	column_name,
+	(
+		data_type
+		|| DECODE(
+			data_type,
+			'NUMBER',
+				CASE
+					WHEN data_precision IS NULL THEN
+						''
+					ELSE
+						'(' || data_precision || ')'
+				END,
+			'VARCHAR2', '(' || data_length || ')',
+			data_precision || ', ' || data_length
+			-- CHAR
+			-- CLOB
+			-- FLOAT
+			-- LONG
+			-- NCHAR
+			-- RAW
+			-- ROWID
+			-- TIMESTAMP(3)
+			-- TIMESTAMP(6)
+			-- TIMESTAMP(6) WITH TIME ZONE
+			-- TIMESTAMP(9)
+			-- UNDEFINED
+		)
+		|| DECODE(
+			nullable,
+			'Y', ' ',
+			' NOT '
+		)
+		|| 'NULLABLE'
+	)
+		AS data_type
 FROM
 	all_tab_columns
+WHERE
+	owner = '&owner'
+	AND table_name = '&name'
+ORDER BY
+	column_id
 ;
 
--- List all tables visible to the current user.
+-- List all tables and views visible to the current user with similar names.
+WITH
+	".objects" AS (
+		(
+			SELECT /*+ PARALLEL USE_HASH */
+				owner
+					AS "owner",
+				table_name
+					AS "name"
+			FROM
+				all_tables
+		) UNION ALL (
+			SELECT /*+ PARALLEL USE_HASH */
+				owner
+					AS "owner",
+				view_name
+					AS "name"
+			FROM
+				all_views
+		)
+	)
 SELECT /*+ PARALLEL USE_HASH */
-	table_name
+	"owner",
+	"name"
 FROM
-	all_tables
+	".objects"
+WHERE
+	"owner" = '&owner'
+	AND LOWER("name") LIKE LOWER('%&name%')
+ORDER BY
+	1,
+	2
