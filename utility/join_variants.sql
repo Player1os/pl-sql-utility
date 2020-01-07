@@ -19,7 +19,7 @@ INSERT INTO b VALUES (3)
 -- 2, 3
 
 -- Cross join: standard variant.
-SELECT
+SELECT /*+ PARALLEL USE_HASH */
 	*
 FROM
 	a
@@ -27,7 +27,7 @@ FROM
 ;
 
 -- Cross join: oracle variant.
-SELECT
+SELECT /*+ PARALLEL USE_HASH */
 	*
 FROM
 	a,
@@ -40,7 +40,7 @@ FROM
 -- 2, NULL
 
 -- Full join: standard variant.
-SELECT
+SELECT /*+ PARALLEL USE_HASH */
 	*
 FROM
 	a
@@ -50,7 +50,7 @@ FROM
 
 -- Full join: oracle variant.
 (
-	SELECT
+	SELECT /*+ PARALLEL USE_HASH */
 		*
 	FROM
 		a,
@@ -58,7 +58,7 @@ FROM
 	WHERE
 		a.x (+) = b.x
 ) UNION (
-	SELECT
+	SELECT /*+ PARALLEL USE_HASH */
 		*
 	FROM
 		a,
@@ -73,7 +73,7 @@ FROM
 -- 2, NULL
 
 -- Left join: standard variant.
-SELECT
+SELECT /*+ PARALLEL USE_HASH */
 	*
 FROM
 	a
@@ -82,7 +82,7 @@ FROM
 ;
 
 -- Left join: oracle variant.
-SELECT
+SELECT /*+ PARALLEL USE_HASH */
 	*
 FROM
 	a,
@@ -96,7 +96,7 @@ WHERE
 -- NULL, 3
 
 -- Right join: standard variant.
-SELECT
+SELECT /*+ PARALLEL USE_HASH */
 	*
 FROM
 	a
@@ -105,7 +105,7 @@ FROM
 ;
 
 -- Right join: oracle variant.
-SELECT
+SELECT /*+ PARALLEL USE_HASH */
 	*
 FROM
 	a,
@@ -118,7 +118,7 @@ WHERE
 -- 1, 1
 
 -- Right join: standard variant.
-SELECT
+SELECT /*+ PARALLEL USE_HASH */
 	*
 FROM
 	a
@@ -127,7 +127,7 @@ FROM
 ;
 
 -- Right join: oracle variant.
-SELECT
+SELECT /*+ PARALLEL USE_HASH */
 	*
 FROM
 	a,
