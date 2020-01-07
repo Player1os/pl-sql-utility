@@ -1,5 +1,5 @@
 -- Restore table from recycle bin.
-FLASHBACK TABLE "table_1" TO BEFORE DROP
+FLASHBACK TABLE &table_name TO BEFORE DROP
 ;
 
 -- List object in the recycle bin.
@@ -13,7 +13,7 @@ FROM
 DELETE FROM
 	RECYCLEBIN
 WHERE
-	object_name = "table_1"
+	object_name = '&table_name'
 ;
 
 -- Empty the recycle bin.

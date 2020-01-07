@@ -1,20 +1,20 @@
 -- Create a table.
-CREATE TABLE "table_1"
+CREATE TABLE "&table_name"
 	NOLOGGING
 	PCTFREE 0 -- Use only if the table in question will be read-only and will not be updated with new values.
 	COMPRESS -- May be contraproductive if the data size cannot be significantly reduced.
 (
-	"column_1" CHAR(1 BYTE) NOT NULL, -- Boolean.
-	"column_2" NUMBER(8) NOT NULL, -- Integer.
-	"column_3" NUMBER(8, 4) NOT NULL, -- Decimal.
-	"column_4" DOUBLE PRECISION NOT NULL, -- Float.
+	"&column_name_1" CHAR(1 BYTE) NOT NULL, -- Boolean.
+	"&column_name_2" NUMBER(8) NOT NULL, -- Integer.
+	"&column_name_3" NUMBER(8, 4) NOT NULL, -- Decimal.
+	"&column_name_4" DOUBLE PRECISION NOT NULL, -- Float.
 	-- ...
-	"column_n" VARCHAR2(256) -- String.
+	"&column_name_N" VARCHAR2(256) -- String.
 )
 ;
 
 -- Create a table from a select query.
-CREATE TABLE "table_1"
+CREATE TABLE "&table_name"
 	NOLOGGING
 	PCTFREE 0 -- Use only if the table in question will be read-only and will not be updated with new values.
 	COMPRESS -- May be contraproductive if the data size cannot be significantly reduced.
@@ -25,86 +25,86 @@ AS (
 ;
 
 -- Create a primary key constraint.
-ALTER TABLE "table_1"
-	ADD CONSTRAINT "table_1_pk"
+ALTER TABLE "&table_name"
+	ADD CONSTRAINT "&primary_key_name" -- pk suffix
 	PRIMARY KEY (
-		"column_1",
+		"&column_name_1",
 		-- ...
-		"column_n"
+		"&column_name_N"
 	)
 ;
 
 -- Create a foreign key constraint.
-ALTER TABLE "table_1"
-	ADD CONSTRAINT "table_1_fk1"
+ALTER TABLE "&primary_table_name"
+	ADD CONSTRAINT "&foreign_key_constraint_name" -- fkM suffix
 	FOREIGN KEY (
-		"column_1",
+		"&column_name_1",
 		-- ...
-		"column_n"
+		"&column_name_N"
 	)
-	REFERENCES "table_2" (
-		"column_1",
+	REFERENCES "&secondary_table_name" (
+		"&column_name_1",
 		-- ...
-		"column_n"
+		"&column_name_N"
 	)
 ;
 
 -- Create a unique constraint.
-ALTER TABLE "table"
-	ADD CONSTRAINT "table_unq1"
+ALTER TABLE "&table_name"
+	ADD CONSTRAINT "&unique_constraint_name" -- unqM suffix
 	UNIQUE (
-		"column_1",
+		"&column_name_1",
 		-- ...
-		"column_n"
+		"&column_name_N"
 	)
 ;
 
 -- Create an index.
-CREATE INDEX "table_1_idx1"
-	ON "table_1" (
-		"column_1",
+CREATE INDEX "index_name" -- idxM suffix
+	ON "&table_name" (
+		"&column_name_1",
 		-- ...
-		"column_n"
+		"&column_name_N"
 	)
 ;
 
 -- Drop an index.
 -- It is less expensive to drop the index before and rebuild it after a large batch operation that alters the table's contents.
-DROP INDEX "table_1_idx1"
+DROP INDEX "&table_index_name" -- idxM suffix
 ;
 
 -- Load data from a table.
 SELECT /*+ PARALLEL USE_HASH */ DISTINCT -- The Distinct clasue is, of course, optional.
 	*
 FROM
-	"table_1"
+	"&table_name"
 ;
 
 -- Insert data into a table from select.
 -- Use the APPEND hint only on tables whose rows are only incremented and are not deleted.
-INSERT /*+ APPEND */ INTO "table_1e" ( -- Optional if a subset of the columns is to be filled.
-	"column_1",
+INSERT /*+ APPEND */ INTO "&table_name" ( -- Optional if a subset of the columns is to be filled.
+	"&column_name_1",
 	-- ...
-	"column_n"
+	"&column_name_N"
 )
 VALUES (
-	"value_1",
+	"&value_1",
 	-- ...
-	"value_n"
+	"&value_N"
 )
 ;
 
 -- Insert data into a table from a select query.
 -- Use the APPEND hint only on tables whose rows are only incremented and are not deleted.
-INSERT /*+ APPEND */ INTO "table_1"
+INSERT /*+ APPEND */ INTO "&table_name"
 (
 	SELECT -- ...
 )
 ;
 
 -- Empty a table's contents.
-TRUNCATE TABLE "table_1"
+TRUNCATE TABLE "&table_name"
 ;
 
 -- Drop a table.
-DROP TABLE "table_1" PURGE
+DROP TABLE "&table_name" PURGE

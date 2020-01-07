@@ -2,6 +2,6 @@
 SELECT /*+ PARALLEL USE_HASH */
 	*
 FROM
-	"table_1"
+	"&table_name"
 AS OF
 	TIMESTAMP(SYSDATE() - &offset)
