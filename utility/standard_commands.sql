@@ -1,9 +1,5 @@
 -- Create a table.
-CREATE TABLE "&table_name"
-	NOLOGGING
-	PCTFREE 0 -- Use only if the table in question will be read-only and will not be updated with new values.
-	COMPRESS -- May be contraproductive if the data size cannot be significantly reduced.
-(
+CREATE TABLE "&table_name" (
 	"&column_name_1" CHAR(1 BYTE) NOT NULL, -- Boolean.
 	"&column_name_2" NUMBER(8) NOT NULL, -- Integer.
 	"&column_name_3" NUMBER(8, 4) NOT NULL, -- Decimal.
@@ -91,7 +87,7 @@ WITH
 SELECT -- ...
 ;
 
--- Insert data into a table from select.
+-- Insert data into a table.
 -- Use the APPEND hint only on tables whose rows are only incremented and are not deleted.
 INSERT /*+ APPEND */ INTO "&table_name" ( -- Optional if a subset of the columns is to be filled.
 	"&column_name_1",
@@ -108,9 +104,22 @@ VALUES (
 -- Insert data into a table from a select query.
 -- Use the APPEND hint only on tables whose rows are only incremented and are not deleted.
 INSERT /*+ APPEND */ INTO "&table_name"
-(
 	SELECT -- ...
-)
+;
+
+-- Update data in a table.
+UPDATE "&table_name"
+SET
+	"&column_name_1" = 'value_1',
+	-- ...
+	"&column_name_N" = 'value_N'
+WHERE
+	-- ...
+;
+
+DELETE FROM "&table_name"
+WHERE
+	-- ...
 ;
 
 -- Empty a table's contents.
