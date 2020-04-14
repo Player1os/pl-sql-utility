@@ -7,6 +7,8 @@ CREATE TABLE "&table_name" (
 	-- ...
 	"&column_name_N" VARCHAR2(256) -- String.
 )
+	NOLOGGING
+	COMPRESS -- May be contraproductive if the data size cannot be significantly reduced.
 ;
 
 -- Create a table from a select query.
