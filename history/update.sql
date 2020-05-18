@@ -12,7 +12,7 @@ WHERE
 	h."end_datestamp" = 99991231
 	AND (
 		NOT EXISTS (
-			SELECT /*+ PARALLEL USE_HASH */
+			SELECT /*+ PARALLEL X */
 				t.*
 			FROM
 				"table" t
@@ -41,7 +41,7 @@ WHERE
 				)
 		)
 		OR EXISTS (
-			SELECT /*+ PARALLEL USE_HASH */
+			SELECT /*+ PARALLEL X */
 				t.*
 			FROM
 				"table" t
@@ -101,7 +101,7 @@ WHERE
 -- - A current (i.e. with a default max value as the end_datestamp) record with matching key values is found in the historified table with at least one mismatch in the rest of its values.
 
 INSERT /*+ APPEND */ INTO "table_history"
-SELECT /*+ PARALLEL USE_HASH */
+SELECT /*+ PARALLEL X USE_HASH */
 	t.*,
 	TO_CHAR(SYSDATE, 'YYYYMMDD'),
 	99991231
