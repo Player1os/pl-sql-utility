@@ -3,7 +3,7 @@ FLASHBACK TABLE &table_name TO BEFORE DROP
 ;
 
 -- List object in the recycle bin.
-SELECT /*+ PARALLEL X */
+SELECT /*+ PARALLEL(X) */
 	*
 FROM
 	RECYCLEBIN

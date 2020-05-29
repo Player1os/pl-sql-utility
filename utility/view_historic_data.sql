@@ -1,5 +1,5 @@
 -- View data from a historic version of a table.
-SELECT /*+ PARALLEL X USE_HASH */
+SELECT /*+ PARALLEL(X) */
 	*
 FROM
 	"&table_name"

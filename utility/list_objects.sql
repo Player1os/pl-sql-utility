@@ -1,5 +1,5 @@
 -- Compute the space currently occupied by the current user's tables.
-SELECT /*+ PARALLEL X */
+SELECT /*+ PARALLEL(X) */
 	tablespace_name,
 	segment_name
 		AS table_name,
@@ -18,7 +18,7 @@ ORDER BY
 ;
 
 -- List all tables within the current user's schema.
-SELECT /*+ PARALLEL X */ DISTINCT
+SELECT /*+ PARALLEL(X) */ DISTINCT
 	object_name
 FROM
 	user_objects
@@ -27,7 +27,7 @@ WHERE
 ;
 
 -- List all columns of a given table visible to the current user.
-SELECT /*+ PARALLEL X */
+SELECT /*+ PARALLEL(X) */
 	column_name,
 	(
 		data_type
@@ -76,7 +76,7 @@ ORDER BY
 WITH
 	".objects" AS (
 		(
-			SELECT /*+ PARALLEL X */
+			SELECT /*+ PARALLEL(X) */
 				owner
 					AS "owner",
 				table_name
@@ -84,7 +84,7 @@ WITH
 			FROM
 				all_tables
 		) UNION ALL (
-			SELECT /*+ PARALLEL X */
+			SELECT /*+ PARALLEL(X) */
 				owner
 					AS "owner",
 				view_name
@@ -93,7 +93,7 @@ WITH
 				all_views
 		)
 	)
-SELECT /*+ PARALLEL X */
+SELECT /*+ PARALLEL(X) */
 	"owner",
 	"name"
 FROM

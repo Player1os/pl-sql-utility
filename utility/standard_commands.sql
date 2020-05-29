@@ -71,7 +71,7 @@ DROP INDEX "&table_index_name" -- idxM suffix
 ;
 
 -- Load data from a table.
-SELECT /*+ PARALLEL X USE_HASH */ DISTINCT -- The Distinct clasue is, of course, optional.
+SELECT /*+ PARALLEL(X) USE_HASH */ DISTINCT -- The Distinct clasue is, of course, optional.
 	*
 FROM
 	"&table_name"
